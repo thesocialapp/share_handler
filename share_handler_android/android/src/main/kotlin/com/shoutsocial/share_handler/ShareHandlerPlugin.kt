@@ -4,17 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
-
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-import io.flutter.plugin.common.*
+import io.flutter.plugin.common.EventChannel
+import io.flutter.plugin.common.PluginRegistry
 import java.net.URLConnection
 
 private const val kEventsChannel = "com.shoutsocial.share_handler/sharedMediaStream"
@@ -154,20 +154,31 @@ class ShareHandlerPlugin: FlutterPlugin, Messages.ShareHandlerApi, EventChannel.
   private fun handleIntent(intent: Intent, initial: Boolean) {
     val attachments: List<Messages.SharedAttachment>?
     val text: String?
+    val sharedTitle = intent.getStringExtra(Intent.EXTRA_SUBJECT)
+    Log.i("Whatsapp imports", intent.type ?: "type not found")
+    Log.i("Type is here", "${intent.action == Intent.ACTION_SEND} and ${intent.action} and starts with ")
     when {
       (intent.type?.startsWith("text") != true)
-              && (intent.action == Intent.ACTION_SEND
-              || intent.action == Intent.ACTION_SEND_MULTIPLE) -> { // Sharing images or videos
-
+          && (intent.action == Intent.ACTION_SEND
+          || intent.action == Intent.ACTION_SEND_MULTIPLE) -> { // Sharing images or videos
+        Log.i("Whatsapp imports", "SEND")
         attachments = attachmentsFromIntent(intent)
         text = null
+        Log.i("Whatsapp imports text", intent.getStringExtra(Intent.EXTRA_TEXT) ?: "No text")
+      }
+      intent.type?.startsWith("text") == true && intent.action == Intent.ACTION_SEND_MULTIPLE && intent.hasExtra(Intent.EXTRA_TEXT) -> {
+        Log.i("Shared title", sharedTitle ?: "shared title")
+        text = null
+        attachments = attachmentsFromIntent(intent)
       }
       (intent.type == null || intent.type?.startsWith("text") == true)
-              && intent.action == Intent.ACTION_SEND -> { // Sharing text
+          && intent.action == Intent.ACTION_SEND -> { // Sharing text
         text = intent.getStringExtra(Intent.EXTRA_TEXT)
+        Log.i("Whatsapp imports text", text ?: "No text")
         attachments = if (text == null) {
           attachmentsFromIntent(intent)
         } else {
+          Log.i("Whatsapp imports", "We are null")
           null
         }
       }
@@ -199,6 +210,7 @@ class ShareHandlerPlugin: FlutterPlugin, Messages.ShareHandlerApi, EventChannel.
       }
       Intent.ACTION_SEND_MULTIPLE -> {
         val uris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
+        Log.i("Awesome", uris.toString());
         val value = uris?.mapNotNull { uri ->
           attachmentForUri(uri)
         }?.toList()
