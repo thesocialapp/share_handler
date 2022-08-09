@@ -45,9 +45,6 @@ class ShareHandlerAndroidPlatform extends ShareHandlerPlatform {
         eventChannel.receiveBroadcastStream().map<SharedMedia>(
       (dynamic event) {
         final Map<dynamic, dynamic> map = event as Map<dynamic, dynamic>;
-        print('|||||-- The Event => $event');
-        print('|||||-- The MAP => $map');
-        print('|||||-- The MAP Decode => ${SharedMedia.decode(map)}');
         return SharedMedia.decode(map);
       },
     );
