@@ -42,7 +42,7 @@ dependencies:
   #   path: ../share_handler_web 
   # share_handler_windows:
   #   path: ../share_handler_windows 
-  share_handler_platform_interface: ^0.0.4
+  share_handler_platform_interface: ^0.0.5
   # share_handler_platform_interface:
   #   path: ../share_handler_platform_interface
 
