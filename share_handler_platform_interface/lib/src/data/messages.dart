@@ -31,8 +31,10 @@ class SharedAttachment {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     print('|+|+|+|+| message ==>> $message');
     print('|+|+|+|+| pigeonMap ==>> $pigeonMap');
+    print(
+        '|+|+|+|+| path ==>> ${Uri.decodeComponent(pigeonMap['path']! as String)}');
     return SharedAttachment(
-      path: Uri.decodeFull(pigeonMap['path']! as String),
+      path: Uri.decodeComponent(pigeonMap['path']! as String),
       type: SharedAttachmentType.values[pigeonMap['type']! as int],
     );
   }
