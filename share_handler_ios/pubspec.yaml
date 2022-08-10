@@ -1,6 +1,7 @@
 name: share_handler_ios
 description: An implementation for the iOS platform of the Flutter share_handler plugin.
 repository: https://github.com/AboutShout/share_handler/tree/main/share_handler_ios
+publish_to: none
 version: 0.0.9
 
 environment:
@@ -14,8 +15,8 @@ dependencies:
     git:
       url: https://github.com/thesocialapp/share_handler.git
       path: share_handler_platform_interface
-  # share_handler_platform_interface:
-  #   path: ../share_handler_platform_interface
+#  share_handler_platform_interface:
+#    path: ../share_handler_platform_interface
 
 dev_dependencies:
   flutter_lints:
