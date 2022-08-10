@@ -32,7 +32,10 @@ dependencies:
     git: 
       url: https://github.com/thesocialapp/share_handler.git
       path: share_handler_android 
-  share_handler_ios: ^0.0.9
+  share_handler_ios:
+    git:
+      url: https://github.com/thesocialapp/share_handler.git
+      path: share_handler_ios
   # share_handler_ios:
   #   path: ../share_handler_ios
   # share_handler_linux:
@@ -43,7 +46,10 @@ dependencies:
   #   path: ../share_handler_web 
   # share_handler_windows:
   #   path: ../share_handler_windows 
-  share_handler_platform_interface: ^0.0.5
+  share_handler_platform_interface:
+    git:
+      url: https://github.com/thesocialapp/share_handler.git
+      path: share_handler_platform_interface
   # share_handler_platform_interface:
   #   path: ../share_handler_platform_interface
 
