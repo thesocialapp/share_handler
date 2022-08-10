@@ -3,18 +3,10 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show WriteBuffer, ReadBuffer;
 import 'package:flutter/services.dart';
 
-enum SharedAttachmentType {
-  image,
-  video,
-  audio,
-  file,
-}
+enum SharedAttachmentType { image, video, audio, file }
 
 class SharedAttachment {
-  SharedAttachment({
-    required this.path,
-    required this.type,
-  });
+  SharedAttachment({required this.path, required this.type});
 
   /// The path to the file on device
   String path;
@@ -108,6 +100,7 @@ class SharedMedia {
 
 class _ShareHandlerApiCodec extends StandardMessageCodec {
   const _ShareHandlerApiCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is SharedAttachment) {
@@ -155,8 +148,10 @@ class ShareHandlerApi {
 
   Future<SharedMedia?> getInitialSharedMedia() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.ShareHandlerApi.getInitialSharedMedia', codec,
-        binaryMessenger: _binaryMessenger);
+      'dev.flutter.pigeon.ShareHandlerApi.getInitialSharedMedia',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -185,8 +180,10 @@ class ShareHandlerApi {
 
   Future<void> recordSentMessage(SharedMedia argMedia) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.ShareHandlerApi.recordSentMessage', codec,
-        binaryMessenger: _binaryMessenger);
+      'dev.flutter.pigeon.ShareHandlerApi.recordSentMessage',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[argMedia]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -209,8 +206,10 @@ class ShareHandlerApi {
 
   Future<void> resetInitialSharedMedia() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.ShareHandlerApi.resetInitialSharedMedia', codec,
-        binaryMessenger: _binaryMessenger);
+      'dev.flutter.pigeon.ShareHandlerApi.resetInitialSharedMedia',
+      codec,
+      binaryMessenger: _binaryMessenger,
+    );
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
