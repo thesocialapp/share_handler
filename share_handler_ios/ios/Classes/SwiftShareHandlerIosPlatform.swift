@@ -28,6 +28,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     public static let instance = SwiftShareHandlerIosPlatform()
 
     public static func register(with registrar: FlutterPluginRegistrar) {
+        print("inside register")
         let messenger : FlutterBinaryMessenger = registrar.messenger()
         let api : ShareHandlerApi & NSObjectProtocol = instance
         ShareHandlerApiSetup(messenger, api)
@@ -234,7 +235,10 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     }
 
     func getInitialSharedMedia(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> SharedMedia? {
+        print("inside getInitialSharedMedia")
         let sharedMedia = initialMedia
+        print("inside getInitialSharedMedia sharedMedia = \(sharedMedia)")
+
         return sharedMedia
     }
 

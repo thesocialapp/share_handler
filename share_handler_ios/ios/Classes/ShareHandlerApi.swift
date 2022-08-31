@@ -64,7 +64,10 @@ class ShareHandlerApiCodecReaderWriter: FlutterStandardReaderWriter {
 }
 
 let ShareHandlerApiGetCodecSSharedObject: FlutterStandardMessageCodec = {
+    print("inside ShareHandlerApiGetCodecSSharedObject")
     var sSharedObject = FlutterStandardMessageCodec(readerWriter: ShareHandlerApiCodecReaderWriter())
+    print("inside ShareHandlerApiGetCodecSSharedObject sSharedObject: \(sSharedObject)")
+
     return sSharedObject
 }()
 
@@ -81,16 +84,23 @@ protocol ShareHandlerApi: AnyObject {
 
 func ShareHandlerApiSetup(_ binaryMessenger: FlutterBinaryMessenger, _ api: (NSObjectProtocol & ShareHandlerApi)) {
     do {
+        print("inside ShareHandlerApiSetup before FlutterBasicMessageChannel")
         let channel = FlutterBasicMessageChannel(
             name: "dev.flutter.pigeon.ShareHandlerApi.getInitialSharedMedia",
             binaryMessenger: binaryMessenger,
             codec: ShareHandlerApiGetCodec())
 //        assert(api.responds(to: Selector(("getInitialSharedMedia:"))))
-        
+
+       print("inside ShareHandlerApiSetup after FlutterBasicMessageChannel")
+
+
         channel.setMessageHandler() { (message, callback) -> () in
             var error: FlutterError?
             let output = api.getInitialSharedMedia(&error)
-            
+
+            print("inside ShareHandlerApiSetup setMessageHandler error: \(error) & output: \(output)")
+
+
             callback(wrapResult(output?.toDictionary(), error))
         }
     }
