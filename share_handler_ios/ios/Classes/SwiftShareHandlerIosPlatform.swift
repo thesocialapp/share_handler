@@ -33,10 +33,17 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
         let api : ShareHandlerApi & NSObjectProtocol = instance
         ShareHandlerApiSetup(messenger, api)
 
+        print("inside register after ShareHandlerApiSetup messenger:\(messenger) api: \(api)")
+
+
         let eventsChannel = FlutterEventChannel(name: kEventsChannel, binaryMessenger: messenger)
+        print("inside register eventsChannel: \(eventsChannel)")
+
         eventsChannel.setStreamHandler(instance)
 
         registrar.addApplicationDelegate(instance)
+        print("end register")
+
     }
 
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
