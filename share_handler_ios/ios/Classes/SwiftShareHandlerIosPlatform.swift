@@ -74,6 +74,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
         if let url = launchOptions[UIApplication.LaunchOptionsKey.url] as? URL {
             if (hasMatchingSchemePrefix(url: url)) {
+            print("inside package application didFinishLaunchingWithOptions if (hasMatchingSchemePrefix(url: url)) url: \(url)")
                 return handleUrl(url: url, setInitialData: true)
             }
             return true
@@ -100,6 +101,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     // Reference: https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623112-application
     public func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         if (hasMatchingSchemePrefix(url: url)) {
+            print("inside package application open url if (hasMatchingSchemePrefix(url: url)) url: \(url)")
             return handleUrl(url: url, setInitialData: false)
         }
         return false
@@ -114,6 +116,8 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     public func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]) -> Void) -> Bool {
         if let url = userActivity.webpageURL {
             if (hasMatchingSchemePrefix(url: url)) {
+                print("inside package application continue userActivity if (hasMatchingSchemePrefix(url: url)) url: \(url)")
+
                 return handleUrl(url: url, setInitialData: true)
             }
         }
@@ -125,16 +129,22 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
 //            let appDomain = Bundle.main.bundleIdentifier!
             let appGroupId = (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String) ?? "group.\(Bundle.main.bundleIdentifier!)"
             let userDefaults = UserDefaults(suiteName: appGroupId)
-            
+
+            print("inside package handleUrl appGroupId: \(appGroupId) & userDefaults:\(userDefaults)")
+
             var sharedMedia: SharedMedia?
 
             let params = url.queryDictionary
             if let sharedPreferencesKey = params?["key"] {
                 if let data = userDefaults?.object(forKey: sharedPreferencesKey) as? Data {
                     sharedMedia = try? JSONDecoder().decode(SharedMedia.self, from: data)
+                    print("inside package handleUrl if sharedPreferencesKey = params?['key'] sharedMedia: \(sharedMedia) & data:\(data)")
+
                 }
             } else if url.absoluteString.hasPrefix("file://") {
                 sharedMedia = SharedMedia.init(attachments: [SharedAttachment.init(path: url.absoluteString, type: SharedAttachmentType.file)], conversationIdentifier: nil, content: nil, speakableGroupName: nil, serviceName: nil, senderIdentifier: nil, imageFilePath: nil)
+                print("inside package handleUrl if url.absoluteString.hasPrefix sharedMedia: \(sharedMedia) & url.absoluteString:\(url.absoluteString)")
+
             }
             
             if let media = sharedMedia {
@@ -144,6 +154,8 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
                     initialMedia = media
                 }
                 let map = media.toDictionary()
+                print("inside package before eventSink map: \(map) ")
+
                 eventSink?(map)
                 
                 return true
@@ -216,13 +228,19 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
 
     private func getAbsolutePath(for identifier: String) -> String? {
         if (identifier.starts(with: "file://") || identifier.starts(with: "/var/mobile/Media") || identifier.starts(with: "/private/var/mobile")) {
+            print("inside package getAbsolutePath identifier: \(identifier)")
+
             return identifier.replacingOccurrences(of: "file://", with: "")
         }
         let phAsset = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: .none).firstObject
         if(phAsset == nil) {
+            print("inside package if(phAsset == nil) ")
+
             return nil
         }
         let (url, _) = getFullSizeImageURLAndOrientation(for: phAsset!)
+         print("inside package getAbsolutePath url: \(url)")
+
         return url
     }
 
