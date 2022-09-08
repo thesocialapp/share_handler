@@ -138,7 +138,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
             if let sharedPreferencesKey = params?["key"] {
                 if let data = userDefaults?.object(forKey: sharedPreferencesKey) as? Data {
                     sharedMedia = try? JSONDecoder().decode(SharedMedia.self, from: data)
-                    print("inside package handleUrl if sharedPreferencesKey = params?['key'] sharedMedia: \(sharedMedia) & data:\(data)")
+                    print("inside package handleUrl if sharedPreferencesKey = params?['key'] sharedPreferencesKey:\(sharedPreferencesKey) sharedMedia: \(sharedMedia) & data:\(data)")
 
                 }
             } else if url.absoluteString.hasPrefix("file://") {
