@@ -72,6 +72,8 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     // them from getting the chance to.
     // Reference: https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1622921-application
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
+            print("inside package application didFinishLaunchingWithOptions @start")
+
         if let url = launchOptions[UIApplication.LaunchOptionsKey.url] as? URL {
             if (hasMatchingSchemePrefix(url: url)) {
             print("inside package application didFinishLaunchingWithOptions if (hasMatchingSchemePrefix(url: url)) url: \(url)")
@@ -79,11 +81,14 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
             }
             return true
         } else if let activityDictionary = launchOptions[UIApplication.LaunchOptionsKey.userActivityDictionary] as? [AnyHashable: Any] {
+            print("inside package application didFinishLaunchingWithOptions @else if let activityDictionary =launchOptions & activityDictionary: \(activityDictionary)")
             // Handle multiple URLs shared in
             for key in activityDictionary.keys {
                 if let userActivity = activityDictionary[key] as? NSUserActivity {
+            print("inside package application didFinishLaunchingWithOptions if let userActivity = activityDictionary[key] & userActivity.webpageURL:\(userActivity.webpageURL)")
                     if let url = userActivity.webpageURL {
                         if (hasMatchingSchemePrefix(url: url)) {
+                             print("inside package application didFinishLaunchingWithOptions if (hasMatchingSchemePrefix(url: url)) inside url = userActivity.webpageURL  url: \(url)")
                             return handleUrl(url: url, setInitialData: true)
                         }
                         return true
